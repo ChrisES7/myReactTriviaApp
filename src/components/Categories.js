@@ -5,12 +5,16 @@ class Categories extends Component {
   constructor() {
     super()
     this.state = {
+      buttonId: "",
       message: "Pick your category : "
     }
   }
 
   chooseCategory(cat) {
+
+    //NEW WAY OF DOING : id for each button is the case name, so when a button is clicked, you get element by id and change its background color
     this.setState({
+      buttonId: `${cat}`,
       message: `You chose ${cat}`
     })
     switch (cat) {
@@ -38,6 +42,21 @@ class Categories extends Component {
         console.log(cat);
         break;
     }
+    console.log(this.state.buttonId);
+    let currentBtn = document.getElementById(this.state.buttonId);
+    let allButtons = document.querySelectorAll(".onclickButtonsDiv button");
+    if (currentBtn == null) {
+        console.log("NULL"); 
+    }else {
+      allButtons.forEach((currentBtn) => {
+          currentBtn.style.backgroundColor = "white";
+      });
+
+      console.log(document.querySelectorAll(".onclickButtonsDiv button"));
+      currentBtn.style.backgroundColor = "#baeafa";
+    }
+
+
   }
 
   render() {
@@ -47,20 +66,20 @@ class Categories extends Component {
     return (
       <div>
         <h1 id="categoryPickHeader">{this.state.message}</h1>
-        <div class="onclickButtonsDiv">
+        <div className="onclickButtonsDiv">
 
           <div>
-            <button onClick={ () => this.chooseCategory("genKnow")}>General Knowledge</button>
-            <button onClick={ () => this.chooseCategory("art")}>Art</button>
+            <button id="genKnow" onClick={ () => this.chooseCategory("genKnow")}>General Knowledge</button>
+            <button id="art" onClick={ () => this.chooseCategory("art")}>Art</button>
           </div>
           <div>
-            <button onClick={ () => this.chooseCategory("sports")}>Sports</button>
-            <button onClick={ () => this.chooseCategory("myth")}>Mythology</button>
-            <button onClick={ () => this.chooseCategory("history")}>History</button>
+            <button id="sports" onClick={ () => this.chooseCategory("sports")}>Sports</button>
+            <button id="myth" onClick={ () => this.chooseCategory("myth")}>Mythology</button>
+            <button id="history" onClick={ () => this.chooseCategory("history")}>History</button>
           </div>
           <div>
-            <button onClick={ () => this.chooseCategory("geo")}>Geography</button>
-            <button onClick={ () => this.chooseCategory("animals")}>Animals</button>
+            <button id="geo" onClick={ () => this.chooseCategory("geo")}>Geography</button>
+            <button id="animals" onClick={ () => this.chooseCategory("animals")}>Animals</button>
           </div>
         </div>
       </div>
