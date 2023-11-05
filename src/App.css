@@ -10,3 +10,15 @@ body {
 .App h1,h3 {
   color:white;
 }
+
+categoryPickHeader {
+  color: red;
+}
+
+.onclickButtonsDiv {
+
+}
+
+.onclickButtonsDiv button {
+  background-color: white;
+}
