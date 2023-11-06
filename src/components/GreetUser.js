@@ -1,7 +1,6 @@
 import React from 'react'
 
 
-
 const Greet = (user) => {
   return (
     <div>
