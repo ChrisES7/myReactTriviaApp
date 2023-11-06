@@ -19,6 +19,7 @@ class Categories extends Component {
         buttonId: `${cat}`,
       },
       () => {
+        // pass a callback function, so that the rest of the code only executes when the state has been changed.
         switch (cat) {
           case "genKnow":
             catFull = "General Knowledge";
@@ -112,6 +113,7 @@ class Categories extends Component {
             </div>
           </div>
         </div>
+        <QuizParams cat={this.state.catFull} />
       </div>
     );
   }

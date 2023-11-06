@@ -12,49 +12,35 @@ class QuizParams extends Component {
     };
   }
 
-  // categories.forEach((category) => {
-  //   difficulties.forEach((difficulty) => {
-  //     questionTypes.forEach((type) => {
-  //       const description = `${category} (${difficulty}, ${type === "multiple" ? "Multiple Choice" : "True/False"})`;
-  //       quizOptions.push({ category, difficulty, type, description });
-  //     });
-  //   });
-  // });
-
-  getQuestions() {
+  getQuestions(props) {
+    console.log(props);
     //deactivate button and selects and the category buttons
-    // initiate all input values in variables
+    //check if variables are empty
     let nbQuestionsSelect = document.getElementById("nbQuestionsSelect");
     let difficultySelect = document.getElementById("difficultySelect");
     let typeSelect = document.getElementById("typeSelect");
     console.log(nbQuestionsSelect.value);
     console.log(difficultySelect.value);
     console.log(typeSelect.value);
-    if (true) {
-    }
-    const nbQuestions = [3, 4, 5, 6, 7, 8, 9, 10];
-    // const categories = [
-    //   "General Knowledge",
-    //   "Art",
-    //   "Sports",
-    //   "Mythology",
-    //   "History",
-    //   "Geography",
-    // ]; // Add more categories
-    const difficulties = ["easy", "medium", "hard"];
-    const questionTypes = ["multiple", "trueFalse"];
+    let apiUrl = `https://opentdb.com/api.php?amount=${nbQuestionsSelect.value}&category=22&difficulty=${difficultySelect.value}&type=${typeSelect.value}`;
+    //
+    //i could also use state variables
+    //
+    // this.setState({
+    //   nbQuestions: nbQuestionsSelect.value,
+    //   category: "",
+    //   difficulty: difficultySelect.value,
+    //   type: typeSelect.value,
+    // });
+    // let apiUrl = `https://opentdb.com/api.php?amount=${this.state.nbQuestions}&category=22&difficulty=${this.state.difficulty}&type=${this.state.type}`;
 
-    const quizOptions = [];
-
-    switch (nbQuestionsSelect.value) {
-      case 3:
-        break;
-      default:
-    }
+    // document.querySelector(
+    //   ".allChoicesDiv"
+    // ).innerHTML += `<h2 style="color:white;">${apiUrl}</h2>`;
   }
   render() {
+    console.log(this.props.cat);
     //i will put a form to make a request in the future
-    // i can make a for loop and append these <option value="8">test8</option>
     return (
       <div>
         <div className="allChoicesDiv">
@@ -84,11 +70,14 @@ class QuizParams extends Component {
               <label>Number of Questions :</label>
               <br />
               <select className="selectParam" id="typeSelect">
-                <option value="multipleChoice">Multiple Choice</option>
-                <option value="trueFalse">True or False</option>
+                <option value="multiple">Multiple Choice</option>
+                <option value="boolean">True or False</option>
               </select>
             </div>
-            <button id="btnDone" onClick={() => this.getQuestions()}>
+            <button
+              id="btnDone"
+              onClick={() => this.getQuestions(this.props.cat)}
+            >
               Start Quiz
             </button>
           </div>
