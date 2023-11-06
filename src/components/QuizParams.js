@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Quiz from "./Quiz";
 import "../App.css";
 
 class QuizParams extends Component {
@@ -12,17 +13,42 @@ class QuizParams extends Component {
     };
   }
 
-  getQuestions(props) {
-    console.log(props);
+  getQuestions(prop) {
+    console.log(prop);
     //deactivate button and selects and the category buttons
     //check if variables are empty
+    let categoryName = prop;
+    let category;
+    switch (categoryName) {
+      case "General Knowledge":
+        category = 9;
+        break;
+      case "Art":
+        category = 25;
+        break;
+      case "Sports":
+        category = 21;
+        break;
+      case "Mythology":
+        category = 20;
+        break;
+      case "History":
+        category = 23;
+        break;
+      case "Geography":
+        category = 22;
+        break;
+      case "Animals":
+        category = 27;
+        break;
+    }
     let nbQuestionsSelect = document.getElementById("nbQuestionsSelect");
     let difficultySelect = document.getElementById("difficultySelect");
     let typeSelect = document.getElementById("typeSelect");
     console.log(nbQuestionsSelect.value);
     console.log(difficultySelect.value);
     console.log(typeSelect.value);
-    let apiUrl = `https://opentdb.com/api.php?amount=${nbQuestionsSelect.value}&category=22&difficulty=${difficultySelect.value}&type=${typeSelect.value}`;
+    let apiUrl = `https://opentdb.com/api.php?amount=${nbQuestionsSelect.value}&category=${category}&difficulty=${difficultySelect.value}&type=${typeSelect.value}`;
     //
     //i could also use state variables
     //
@@ -34,9 +60,10 @@ class QuizParams extends Component {
     // });
     // let apiUrl = `https://opentdb.com/api.php?amount=${this.state.nbQuestions}&category=22&difficulty=${this.state.difficulty}&type=${this.state.type}`;
 
-    // document.querySelector(
-    //   ".allChoicesDiv"
-    // ).innerHTML += `<h2 style="color:white;">${apiUrl}</h2>`;
+    document.querySelector(
+      ".allChoicesDiv"
+    ).innerHTML += `<h2 style="color:white;">${apiUrl}</h2>`;
+    console.log(apiUrl);
   }
   render() {
     console.log(this.props.cat);
@@ -74,6 +101,7 @@ class QuizParams extends Component {
                 <option value="boolean">True or False</option>
               </select>
             </div>
+            <button onClick={console.log("Hello")}>Hi</button>
             <button
               id="btnDone"
               onClick={() => this.getQuestions(this.props.cat)}
@@ -82,6 +110,7 @@ class QuizParams extends Component {
             </button>
           </div>
         </div>
+        <Quiz />
       </div>
     );
   }
