@@ -1,14 +1,14 @@
 body {
-  background-color: #021429 ;
+  background-color: #021429;
 }
 
 .App {
   text-align: center;
-
 }
 
-.App h1,h3 {
-  color:white;
+.App h1,
+h3 {
+  color: white;
 }
 
 categoryPickHeader {
@@ -16,9 +16,16 @@ categoryPickHeader {
 }
 
 .onclickButtonsDiv {
-
 }
 
 .onclickButtonsDiv button {
   background-color: white;
+}
+
+label {
+  color: white;
+}
+
+.allChoicesDiv {
+  margin: 20px;
 }
