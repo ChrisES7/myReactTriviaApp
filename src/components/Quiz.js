@@ -12,7 +12,15 @@ class Quiz extends Component {
 
   render() {
     // console.log(this.props);
-    return <h1>K.</h1>;
+    return (
+      <div>
+        <h1>K.</h1>
+        <div>
+          <h1>{this.props.data}</h1>
+          <h1>{this.props.dataex}</h1>
+        </div>
+      </div>
+    );
   }
 }
 

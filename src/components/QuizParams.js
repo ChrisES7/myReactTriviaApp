@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Quiz from "./Quiz";
 import "../App.css";
 
+let dataa;
+
 class QuizParams extends Component {
   constructor() {
     super();
@@ -11,6 +13,20 @@ class QuizParams extends Component {
       difficulty: "",
       type: "",
     };
+  }
+
+  getData(data) {
+    console.log(data);
+    dataa = data;
+    console.log(dataa);
+    return data;
+  }
+
+  async getApiData(apiUrl, getData) {
+    const response = await fetch(apiUrl);
+    let data = await response.json();
+    console.log(data);
+    this.getData(data);
   }
 
   getQuestions(prop) {
@@ -48,7 +64,13 @@ class QuizParams extends Component {
     console.log(nbQuestionsSelect.value);
     console.log(difficultySelect.value);
     console.log(typeSelect.value);
+
+    //
     let apiUrl = `https://opentdb.com/api.php?amount=${nbQuestionsSelect.value}&category=${category}&difficulty=${difficultySelect.value}&type=${typeSelect.value}`;
+    // OHH, i need to put the this keyword to access functions from inside a method
+    this.getApiData(apiUrl, this.getData);
+    //trying to send data inside component props
+
     //
     //i could also use state variables
     //
@@ -59,14 +81,17 @@ class QuizParams extends Component {
     //   type: typeSelect.value,
     // });
     // let apiUrl = `https://opentdb.com/api.php?amount=${this.state.nbQuestions}&category=22&difficulty=${this.state.difficulty}&type=${this.state.type}`;
-
+    //<Quiz data={this.getQuestions(this.props.cat)} /> in render()
     document.querySelector(
       ".allChoicesDiv"
     ).innerHTML += `<h2 style="color:white;">${apiUrl}</h2>`;
     console.log(apiUrl);
   }
+  //either send the component call only after the start quiz has been activated, but how
+
   render() {
-    console.log(this.props.cat);
+    // console.log(this.props.cat);
+    // console.log(this.getQuestions(this.props.cat));
     //i will put a form to make a request in the future
     return (
       <div>
@@ -101,7 +126,6 @@ class QuizParams extends Component {
                 <option value="boolean">True or False</option>
               </select>
             </div>
-            <button onClick={console.log("Hello")}>Hi</button>
             <button
               id="btnDone"
               onClick={() => this.getQuestions(this.props.cat)}
@@ -110,7 +134,7 @@ class QuizParams extends Component {
             </button>
           </div>
         </div>
-        <Quiz />
+        <Quiz data={dataa} dataex="data" />
       </div>
     );
   }
