@@ -3,6 +3,7 @@ import Quiz from "./Quiz";
 import "../App.css";
 
 let dataa;
+let dataArray = [];
 
 class QuizParams extends Component {
   constructor() {
@@ -12,14 +13,20 @@ class QuizParams extends Component {
       category: "",
       difficulty: "",
       type: "",
+      fetchedData: null,
     };
   }
-
+  //basically, i need to put an array into the the state variable, but idk what to put inside the array
   getData(data) {
     console.log(data);
     dataa = data;
-    console.log(dataa);
-    return data;
+    //check if data.variable exists
+    // dataArray.push(dataa.results);
+    this.setState({ fetchedData: dataa.results }, () => {
+      console.log(this.state.fetchedData);
+    });
+
+    // return data;
   }
 
   async getApiData(apiUrl, getData) {
@@ -93,50 +100,98 @@ class QuizParams extends Component {
     // console.log(this.props.cat);
     // console.log(this.getQuestions(this.props.cat));
     //i will put a form to make a request in the future
-    return (
-      <div>
-        <div className="allChoicesDiv">
-          <div id="nbQuestionsDiv">
-            <label>Number of Questions :</label>
-            <br />
-            <select className="selectParam" id="nbQuestionsSelect">
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-            </select>
-          </div>
-          <div id="difficultyDiv">
-            <label>Difficulty :</label>
-            <br />
-            <select className="selectParam" id="difficultySelect">
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
+    if (this.state.fetchedData) {
+      return (
+        <div>
+          <div className="allChoicesDiv">
             <div id="nbQuestionsDiv">
               <label>Number of Questions :</label>
               <br />
-              <select className="selectParam" id="typeSelect">
-                <option value="multiple">Multiple Choice</option>
-                <option value="boolean">True or False</option>
+              <select className="selectParam" id="nbQuestionsSelect">
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
               </select>
             </div>
-            <button
-              id="btnDone"
-              onClick={() => this.getQuestions(this.props.cat)}
-            >
-              Start Quiz
-            </button>
+            <div id="difficultyDiv">
+              <label>Difficulty :</label>
+              <br />
+              <select className="selectParam" id="difficultySelect">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+              <div id="nbQuestionsDiv">
+                <label>Number of Questions :</label>
+                <br />
+                <select className="selectParam" id="typeSelect">
+                  <option value="multiple">Multiple Choice</option>
+                  <option value="boolean">True or False</option>
+                </select>
+              </div>
+              <button
+                id="btnDone"
+                onClick={() => this.getQuestions(this.props.cat)}
+              >
+                Start Quiz
+              </button>
+              <h1>IF</h1>
+            </div>
+          </div>
+          <Quiz data={this.state.fetchedData} dataex="data" />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <div className="allChoicesDiv">
+            <div id="nbQuestionsDiv">
+              <label>Number of Questions :</label>
+              <br />
+              <select className="selectParam" id="nbQuestionsSelect">
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+            <div id="difficultyDiv">
+              <label>Difficulty :</label>
+              <br />
+              <select className="selectParam" id="difficultySelect">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+              <div id="nbQuestionsDiv">
+                <label>Number of Questions :</label>
+                <br />
+                <select className="selectParam" id="typeSelect">
+                  <option value="multiple">Multiple Choice</option>
+                  <option value="boolean">True or False</option>
+                </select>
+              </div>
+              <button
+                id="btnDone"
+                onClick={() => this.getQuestions(this.props.cat)}
+              >
+                Start Quiz
+              </button>
+              <h1>ELSE</h1>
+            </div>
           </div>
         </div>
-        <Quiz data={dataa} dataex="data" />
-      </div>
-    );
+      );
+    }
   }
 }
 
