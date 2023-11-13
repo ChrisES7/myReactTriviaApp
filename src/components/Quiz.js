@@ -14,6 +14,7 @@ class Quiz extends Component {
     };
     this.putQuestion = this.putQuestion.bind(this);
     this.createAnswers = this.createAnswers.bind(this);
+    this.verifyAnswer = this.verifyAnswer.bind(this);
   }
   // results is undefined
   render() {
@@ -29,16 +30,20 @@ class Quiz extends Component {
     }
     let counter = 0;
     // console.log(this.props);
-    if (multipleChoice) {
-      return (
-        <div>
-          <h1>K.</h1>
-          <div id="quizDiv">
-            <div>{this.putQuestion(this.props.data, multipleChoice)}</div>
+    console.log(this.props.nbQuestions);
+    while (this.state.currentQuestionIndex < this.props.nbQuestions) {
+      if (multipleChoice) {
+        return (
+          <div>
+            <h1>K.</h1>
+            <div id="quizDiv">
+              <div>{this.putQuestion(this.props.data, multipleChoice)}</div>
+            </div>
           </div>
-        </div>
-      );
+        );
+      }
     }
+    return <h1>DONE</h1>;
   }
 
   createAnswers() {
@@ -52,19 +57,14 @@ class Quiz extends Component {
       return button;
     });
 
-    // Shuffle the array
     inputElements.sort(() => Math.random() - 0.5);
 
-    // Append input elements to the body
     inputElements.forEach((input) => {
       document.querySelector("form").appendChild(input);
     });
   }
   putQuestion(questionData, multipleChoice) {
     if (multipleChoice) {
-      // this.questionData.forEach((question) => {
-      //   console.log(question.category);
-      // });
       // let answerIndex = this.state.currentAnswerIndex;
       let answerIndex = 0;
       let currentQuestionIndex = this.state.currentQuestionIndex;
@@ -88,16 +88,7 @@ class Quiz extends Component {
       }
       // call a method that, for each object will put all answers in a  array, then
       // randomize it and then create divs in js and append p elements with answers
-      this.setState({ currentQuestionIndex: 0 });
-
-      // this.setState((prevState) => ({
-      //   counter: (prevState.counter + 1) % 3, // Increment and reset to 0 when it reaches 3
-      // }));
-      // if (this.state.questionsAnswered) {
-      //   this.setState((prevState) => ({
-      //     counter: 0, // Increment and reset to 0 when it reaches 3
-      //   }));
-      // }
+      // this.setState({ currentQuestionIndex: 0 });
     } else if (multipleChoice == false) {
     }
   }
@@ -117,13 +108,55 @@ class Quiz extends Component {
       );
       const answerElements = allAnswers.map((answer, index) => (
         <div key={index} className="answerDiv">
-          <h4 className="answerTitle">{answer}</h4>
+          <button
+            type="button"
+            className="answerButton"
+            onClick={(event) => this.verifyAnswer(answer, event)}
+            key={index}
+          >
+            {answer}
+          </button>
         </div>
       ));
 
       // Return the array of answer elements
       return answerElements;
     }
+  }
+
+  async verifyAnswer(answer, event) {
+    const targetButton = event.target;
+    console.log(targetButton);
+    let data = this.props.data;
+    let correctAnswer = data[this.state.currentQuestionIndex].correct_answer;
+    console.log(this.state.currentQuestionIndex);
+    this.setState(
+      (prevState) => ({
+        currentQuestionIndex: prevState.currentQuestionIndex + 1,
+      }),
+      () => {
+        console.log(this.state.currentQuestionIndex);
+      }
+    );
+    let color;
+    if (answer == correctAnswer) {
+      color = "green";
+      // console.log("ANSWER CORRECT");
+
+      //add a classname witha  transition to green
+    } else {
+      color = "red";
+    }
+
+    targetButton.style.backgroundColor = color;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    targetButton.style.backgroundColor = "";
+
+    // changeQuestion
+    // mkae button white again
+    // add points if correct
+    //add to questions answered
+    // return true;
   }
 }
 export default Quiz;

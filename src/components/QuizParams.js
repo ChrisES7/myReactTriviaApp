@@ -143,7 +143,11 @@ class QuizParams extends Component {
               <h1>IF</h1>
             </div>
           </div>
-          <Quiz data={this.state.fetchedData} dataex="data" />
+          <Quiz
+            data={this.state.fetchedData}
+            nbQuestions={document.getElementById("nbQuestionsSelect").value}
+            dataex="data"
+          />
         </div>
       );
     } else {
