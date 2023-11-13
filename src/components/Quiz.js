@@ -9,7 +9,8 @@ class Quiz extends Component {
     super();
     this.state = {
       // questionData: null,
-      currentIndex: 0,
+      currentQuestionIndex: 0,
+      questionAnswered: false,
     };
     this.putQuestion = this.putQuestion.bind(this);
     this.createAnswers = this.createAnswers.bind(this);
@@ -22,7 +23,7 @@ class Quiz extends Component {
     //   questionDataa = this.state.questionData;
     // }); // how can i only send questionDataa after callback
     let multipleChoice = true;
-    if (this.props.data[this.state.currentIndex.type] == "multiple") {
+    if (this.props.data[this.state.currentQuestionIndex.type] == "multiple") {
       console.log("MULTIPLE");
       multipleChoice = true;
     }
@@ -32,7 +33,7 @@ class Quiz extends Component {
       return (
         <div>
           <h1>K.</h1>
-          <div>
+          <div id="quizDiv">
             <div>{this.putQuestion(this.props.data, multipleChoice)}</div>
           </div>
         </div>
@@ -64,22 +65,64 @@ class Quiz extends Component {
       // this.questionData.forEach((question) => {
       //   console.log(question.category);
       // });
-      let currentIndex = this.state.currentIndex;
-      console.log(currentIndex);
-      return (
-        <div className="divQuestions">
-          {<p key={currentIndex}>{questionData[currentIndex].question}</p>}
-        </div>
-      );
-      this.setState((prevState) => ({
-        counter: (prevState.counter + 1) % 3, // Increment and reset to 0 when it reaches 3
-      }));
-      if (this.state.questionsAnswered) {
-        this.setState((prevState) => ({
-          counter: 0, // Increment and reset to 0 when it reaches 3
-        }));
+      // let answerIndex = this.state.currentAnswerIndex;
+      let answerIndex = 0;
+      let currentQuestionIndex = this.state.currentQuestionIndex;
+      console.log(currentQuestionIndex);
+
+      //put nb of questions chosen in state variable and do a for loop on (while the questions have not run out)
+
+      while (this.state.questionAnswered != true) {
+        return (
+          <div className="divQuestions">
+            {
+              <h2 key={currentQuestionIndex}>
+                {questionData[currentQuestionIndex].question}
+              </h2>
+            }
+            <div className="answersDiv">
+              {this.putAnswers(this.props.data, multipleChoice)}
+            </div>
+          </div>
+        );
       }
+      // call a method that, for each object will put all answers in a  array, then
+      // randomize it and then create divs in js and append p elements with answers
+      this.setState({ currentQuestionIndex: 0 });
+
+      // this.setState((prevState) => ({
+      //   counter: (prevState.counter + 1) % 3, // Increment and reset to 0 when it reaches 3
+      // }));
+      // if (this.state.questionsAnswered) {
+      //   this.setState((prevState) => ({
+      //     counter: 0, // Increment and reset to 0 when it reaches 3
+      //   }));
+      // }
     } else if (multipleChoice == false) {
+    }
+  }
+
+  putAnswers(data, multipleChoice) {
+    let allAnswers = [];
+    let currentQuestionIndex = this.state.currentQuestionIndex;
+    let correctAnswer = data[currentQuestionIndex].correct_answer;
+    let badAnswers = data[currentQuestionIndex].incorrect_answers;
+    console.log(correctAnswer);
+    if (multipleChoice) {
+      allAnswers.push(
+        correctAnswer,
+        badAnswers[0],
+        badAnswers[1],
+        badAnswers[2]
+      );
+      const answerElements = allAnswers.map((answer, index) => (
+        <div key={index} className="answerDiv">
+          <h4 className="answerTitle">{answer}</h4>
+        </div>
+      ));
+
+      // Return the array of answer elements
+      return answerElements;
     }
   }
 }

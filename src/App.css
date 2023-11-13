@@ -29,3 +29,22 @@ label {
 .allChoicesDiv {
   margin: 20px;
 }
+
+#quizDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.divQuestions {
+  background-color: white;
+  width: 400px;
+  border-radius: 20px;
+  padding: 20px 24px;
+  margin-bottom: 40px;
+  height: fit-content();
+}
+
+.divQuestions h2 {
+  font-size: 14pt;
+  font-family: ;
+}
