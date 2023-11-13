@@ -149,7 +149,7 @@ class Quiz extends Component {
     }
 
     targetButton.style.backgroundColor = color;
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 100));
     targetButton.style.backgroundColor = "";
 
     // changeQuestion

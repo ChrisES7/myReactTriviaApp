@@ -77,6 +77,9 @@ class QuizParams extends Component {
     // OHH, i need to put the this keyword to access functions from inside a method
     this.getApiData(apiUrl, this.getData);
     //trying to send data inside component props
+    this.setState({ nbQuestions: nbQuestionsSelect.value }, () => {
+      console.log(this.state.nbQuestions);
+    });
 
     //
     //i could also use state variables
@@ -87,8 +90,7 @@ class QuizParams extends Component {
     //   difficulty: difficultySelect.value,
     //   type: typeSelect.value,
     // });
-    // let apiUrl = `https://opentdb.com/api.php?amount=${this.state.nbQuestions}&category=22&difficulty=${this.state.difficulty}&type=${this.state.type}`;
-    //<Quiz data={this.getQuestions(this.props.cat)} /> in render()
+
     document.querySelector(
       ".allChoicesDiv"
     ).innerHTML += `<h2 style="color:white;">${apiUrl}</h2>`;
@@ -145,7 +147,7 @@ class QuizParams extends Component {
           </div>
           <Quiz
             data={this.state.fetchedData}
-            nbQuestions={document.getElementById("nbQuestionsSelect").value}
+            nbQuestions={this.state.nbQuestions}
             dataex="data"
           />
         </div>
