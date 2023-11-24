@@ -48,7 +48,7 @@ app.get("/loggedIn", (req, res) => {
       return;
     }
 
-    const query = "SELECT loggedIn FROM users WHERE username = ? ";
+    const query = "SELECT * FROM users WHERE username = ? ";
     const values = [username];
 
     connection.query(query, values, (err, results) => {
@@ -70,7 +70,9 @@ app.get("/loggedIn", (req, res) => {
   });
 });
 
-app.post("/createUser", (req, res) => {
+app.post("/loggedIn");
+
+app.post("/register", (req, res) => {
   let userName = req.body.usernameRegistered;
   // params is what is sent through the browser
   // body is sent through javascript
@@ -113,7 +115,7 @@ app.post("/createUser", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const { username, password, user_id } = req.body;
+  const { username } = req.body;
 
   pool.getConnection((err, connection) => {
     if (err) {
@@ -126,9 +128,8 @@ app.post("/login", (req, res) => {
       return;
     }
 
-    const query =
-      "SELECT * FROM users WHERE username = ? AND user_password = ?";
-    const values = [username, password];
+    const query = "SELECT * FROM users WHERE username = ?";
+    const values = [username];
 
     connection.query(query, values, (err, results) => {
       if (err) {
@@ -138,13 +139,29 @@ app.post("/login", (req, res) => {
       }
 
       if (results.length > 0) {
-        req.session.userId = user_id;
-        console.log("ID : " + req.session.userId);
+        // // session is to keep the user logged in
+        console.log(results);
+        // log in and set loggedIn to 1
+        connection.query(
+          `UPDATE users SET loggedIn = 1 WHERE username = ${results.username}`,
+          (err, results) => {
+            if (err) {
+              console.error("Error executing the query: ", err);
+              res.status(500).send("Error executing the query");
+              return;
+            }
+            if (results.length > 0) {
+              console.log(results);
+            }
+          }
+        );
         res.json({
-          userId: user_id,
+          username: results.username,
+          nbPoints: results.nbPoints,
         }); // Sending the userId as JSON response
       } else {
-        res.status(401).send("Invalid username or password");
+        res.status(401).send(`User ${username} not found. `);
+        // check if they want to register? no, do it on register click
       }
     });
   });
