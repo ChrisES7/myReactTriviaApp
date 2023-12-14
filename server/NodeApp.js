@@ -36,7 +36,9 @@ const pool = mysql.createPool({
 
 app.get("/", (req, res) => {});
 
-app.get("/loggedIn", (req, res) => {
+app.get("/loggedIn/:username", (req, res) => {
+  let username = req.params.username;
+  console.log(username);
   pool.getConnection((err, connection) => {
     if (err) {
       console.error(
@@ -49,9 +51,8 @@ app.get("/loggedIn", (req, res) => {
     }
 
     const query = "SELECT * FROM users WHERE username = ? ";
-    const values = [username];
 
-    connection.query(query, values, (err, results) => {
+    connection.query(query, username, (err, results) => {
       if (err) {
         console.error("Error executing the query: ", err);
         res.status(500).send("Error executing the query");
@@ -70,7 +71,42 @@ app.get("/loggedIn", (req, res) => {
   });
 });
 
-app.post("/loggedIn");
+app.post("/loggedIn/:username", (req, res) => {
+  require("dns").lookup(require("os").hostname(), function (err, add, fam) {
+    console.log("addr: " + add);
+  });
+  let username = req.params.username;
+  pool.getConnection((err, connection) => {
+    if (err) {
+      console.error(
+        "Error getting connection from MySQL database pool: " + err.stack
+      );
+      res
+        .status(500)
+        .send("Error getting connection from MySQL database pool.");
+      return;
+    }
+
+    const query = "UPDATE users SET loggedIn = 1 WHERE username = ? ";
+
+    connection.query(query, username, (err, results) => {
+      if (err) {
+        console.error("Error executing the query: ", err);
+        res.status(500).send("Error executing the query");
+        return;
+      }
+
+      if (results.length > 0) {
+        console.log(results);
+        res.json({
+          loggedIn: results,
+        }); // Sending the userId as JSON response
+      } else {
+        res.status(401).send("Invalid username or password");
+      }
+    });
+  });
+});
 
 app.post("/register", (req, res) => {
   let userName = req.body.usernameRegistered;
@@ -125,6 +161,7 @@ app.post("/login", (req, res) => {
       res
         .status(500)
         .send("Error getting connection from MySQL database pool.");
+      connection.release();
       return;
     }
 
@@ -141,20 +178,23 @@ app.post("/login", (req, res) => {
       if (results.length > 0) {
         // // session is to keep the user logged in
         console.log(results);
-        // log in and set loggedIn to 1
-        connection.query(
-          `UPDATE users SET loggedIn = 1 WHERE username = ${results.username}`,
-          (err, results) => {
-            if (err) {
-              console.error("Error executing the query: ", err);
-              res.status(500).send("Error executing the query");
-              return;
-            }
-            if (results.length > 0) {
-              console.log(results);
-            }
-          }
-        );
+        // log in and set loggedIn to 1, but im not allowed 2 queries
+        //
+        // connection.query(
+        //   `UPDATE users SET loggedIn = 1 WHERE username = ?`,
+        //   results.username,
+        //   (err, newResults) => {
+        //     if (err) {
+        //       console.error("Error executing the query: ", err);
+        //       res.status(500).send("Error executing the query");
+        //       connection.release();
+        //       return;
+        //     }
+        //     if (newResults.length > 0) {
+        //       console.log(newResults);
+        //     }
+        //   }
+        // );
         res.json({
           username: results.username,
           nbPoints: results.nbPoints,
@@ -265,5 +305,5 @@ app.get("/getUserTask/:user_id/:task_id", (req, res) => {
   });
 });
 
-const port = process.env.PORT || 3308;
+const port = 3308;
 app.listen(port, console.log("Up and Running"));
